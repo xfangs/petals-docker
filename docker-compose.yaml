@@ -15,15 +15,14 @@ services:
   petals:
     image: fang449718761/petals:last
     container_name: petals
-    restart: always
     ports:
       - 5100:5000
     environment:
-      - MODE=standalone
-      - INITIAL_PEERS="/ip4/13.202.115.78/tcp/31337/p2p/QmYwp7t6zPZB4bwbhdKcJ8WqHEyA14fWLf4inrysS3r9Ye"
+      - INITIAL_PEERS=/ip4/172.31.10.237/tcp/31337/p2p/QmS9fCbG8shJJsGMUEKzE8spkwEhJLQdQd1RQp4qFsWoii
       - HF_TOKEN=${HF_TOKEN}
       - MODEL_NAME=meta-llama/Llama-2-13b-chat-hf
-      - BLOCK_INDICES="0:40"
+      - BLOCK_INDICES=0:40
+    runtime: nvidia
   petals_chat:
     image: fang449718761/petals_chat:last
     container_name: petals_chat
@@ -33,5 +32,5 @@ services:
     ports:
       - 5200:5000
     volumes:
-      - rocketmq-data:/opt/rocketmq/store
       - ./chat/config.py:/app/config.py
+    runtime: nvidia
