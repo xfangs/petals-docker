@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  dht:
+    image: fang449718761/dht:latest
+    container_name: dht
+    restart: always
+    ports:
+      - 31337:31337
+  health_petals:
+    image: fang449718761/health_petals:last
+    container_name: health_petals
+    restart: always
+    ports:
+      - 5000:5000
+  petals:
+    image: fang449718761/petals:last
+    container_name: petals
+    restart: always
+    ports:
+      - 5100:5000
+    environment:
+      - MODE=standalone
+      - INITIAL_PEERS="/ip4/13.202.115.78/tcp/31337/p2p/QmYwp7t6zPZB4bwbhdKcJ8WqHEyA14fWLf4inrysS3r9Ye"
+      - HF_TOKEN=${HF_TOKEN}
+      - MODEL_NAME=meta-llama/Llama-2-13b-chat-hf
+      - BLOCK_INDICES="0:40"
+  petals_chat:
+    image: fang449718761/petals_chat:last
+    container_name: petals_chat
+    restart: always
+    environment:
+      - HF_TOKEN=${HF_TOKEN}
+    ports:
+      - 5200:5000
+    volumes:
+      - rocketmq-data:/opt/rocketmq/store
+      - ./chat/config.py:/app/config.py
